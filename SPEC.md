@@ -84,3 +84,5 @@ T19|.|ollama systemd unit enabled + Restart=always (persist reboot, auto-restart
 
 id|date|cause|fix
 B1|2026-07-21|markdownlint-agentic broken on non-agentic docs: placeholder (agentic#23) + missing is-markdown-agentic classifier (markdownlint#31) + no non-agentic guard (agentic#27)|skip in gitignored `lefthook-local.yml`; loop drops skip when upstream lands
+B2|2026-07-21|pinned CI action removed `HOME` from its pure install-stage environment, causing Git-backed dev-shell setup to fail|give dev-shell hooks a temporary `HOME` fallback before Git-backed setup runs
+B3|2026-07-21|markdown wrappers omitted the shared classifier and left the agentic config placeholder unsubstituted, making lefthook exit 4|package the classifier in both wrappers and substitute the pinned agentic config path

@@ -156,6 +156,10 @@
         pkgs:
         let
           w = wrap pkgs;
+          is-markdown-agentic = pkgs.writeShellApplication {
+            name = "is-markdown-agentic";
+            text = builtins.readFile "${nix-lefthook-markdownlint-src}/is-markdown-agentic.sh";
+          };
         in
         [
           (w "lefthook-ascii-only" nix-lefthook-ascii-only-src {
@@ -203,10 +207,22 @@
             ];
           })
           (w "lefthook-markdownlint" nix-lefthook-markdownlint-src {
-            runtimeInputs = [ pkgs.markdownlint-cli ];
+            runtimeInputs = [
+              is-markdown-agentic
+              pkgs.markdownlint-cli
+            ];
           })
-          (w "lefthook-markdownlint-agentic" nix-lefthook-markdownlint-agentic-src {
-            runtimeInputs = [ pkgs.markdownlint-cli ];
+          (pkgs.writeShellApplication {
+            name = "lefthook-markdownlint-agentic";
+            text =
+              builtins.replaceStrings
+                [ "@MARKDOWNLINT_AGENTIC_CONFIG@" ]
+                [ "${nix-lefthook-markdownlint-agentic-src}/.markdownlint-agentic.yml" ]
+                (builtins.readFile "${nix-lefthook-markdownlint-agentic-src}/lefthook-markdownlint-agentic.sh");
+            runtimeInputs = [
+              is-markdown-agentic
+              pkgs.markdownlint-cli
+            ];
           })
           (w "lefthook-missing-final-newline" nix-lefthook-missing-final-newline-src { })
           (w "lefthook-nix-flake-check" nix-lefthook-nix-flake-check-src {
@@ -264,9 +280,11 @@
             nix-lefthook.packages.${sys}.default
           ];
           defaultShellHook = ''
+            export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
             ${self.packages.${sys}.setting}/bin/sync-setting .
           '';
           agenticShellHook = ''
+            export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
             ${self.packages.${sys}.setting}/bin/sync-setting .
             ${self.packages.${sys}.set}/bin/sync-set .
           '';
