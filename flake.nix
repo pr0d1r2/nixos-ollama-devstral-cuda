@@ -299,10 +299,11 @@
           inherit pkgs;
           src = ./.;
           fragments = [
-            "base"
-            "nix"
-            "shell"
-            "ascii"
+        "base"
+        "nix"
+        "ascii"
+        "markdown"
+        "yaml"
           ];
         })
         // {
