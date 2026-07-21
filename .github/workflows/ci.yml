@@ -23,7 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: cachix/install-nix-action@v27
+      # v31.11.0
+      - uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342
       - name: Sync materialized configs
         run: |
           setting_pkg="$(nix build .#setting --print-out-paths --no-link)"
@@ -44,7 +45,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: cachix/install-nix-action@v27
+      # v31.11.0
+      - uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342
       - name: Sync materialized configs
         run: |
           setting_pkg="$(nix build .#setting --print-out-paths --no-link)"
@@ -65,7 +67,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: cachix/install-nix-action@v27
+      # v31.11.0
+      - uses: cachix/install-nix-action@630ae543ea3a38a9a4166f03376c02c50f408342
       - name: Sync materialized configs
         run: |
           setting_pkg="$(nix build .#setting --print-out-paths --no-link)"
