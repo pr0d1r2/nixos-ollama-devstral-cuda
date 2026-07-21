@@ -139,6 +139,13 @@
         "x86_64-linux"
         "aarch64-linux"
       ];
+      fragments = [
+        "base"
+        "nix"
+        "ascii"
+        "markdown"
+        "yaml"
+      ];
       forAllSystems =
         f: nixpkgs.lib.genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
 
@@ -268,6 +275,7 @@
       devShells = forAllSystems (
         pkgs:
         let
+          mat = set-and-setting.lib.materializationFor { inherit pkgs fragments; };
           sys = pkgs.stdenv.hostPlatform.system;
         in
         set-and-setting.lib.mkDevShells {
@@ -282,11 +290,13 @@
           defaultShellHook = ''
             export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
             ${self.packages.${sys}.setting}/bin/sync-setting .
+            cp -f ${mat.files}/lefthook.yml lefthook.yml
           '';
           agenticShellHook = ''
             export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
             ${self.packages.${sys}.setting}/bin/sync-setting .
             ${self.packages.${sys}.set}/bin/sync-set .
+            cp -f ${mat.files}/lefthook.yml lefthook.yml
           '';
         }
       );
@@ -298,12 +308,7 @@
         (set-and-setting.lib.checksFor {
           inherit pkgs;
           src = ./.;
-          fragments = [
-            "base"
-            "nix"
-            "shell"
-            "ascii"
-          ];
+          inherit fragments;
         })
         // {
           dep-graph = set-and-setting.lib.mkDepGraphCheck {
@@ -313,5 +318,44 @@
           default = pkgs.runCommand "checks" { } "touch $out";
         }
       );
+
+      apps = forAllSystems (pkgs: {
+        confirm = {
+          type = "app";
+          program = "${
+            pkgs.writeShellApplication {
+              name = "confirm";
+              runtimeInputs = [
+                pkgs.coreutils
+                pkgs.diffutils
+                pkgs.findutils
+                pkgs.gawk
+                pkgs.git
+                pkgs.gnugrep
+              ]
+              ++ lefthookWrappersFor pkgs;
+              text =
+                builtins.replaceStrings
+                  [
+                    "@FRAGMENTS_DIR@"
+                    "@ASSEMBLE_SCRIPT@"
+                    "@DETECT_SCRIPT@"
+                    "@SETTING_SRC@"
+                    "@CONFIRM_SCRIPT@"
+                    "@CONFIRM_REV@"
+                  ]
+                  [
+                    "${set-and-setting}/setting/integrations/lefthook"
+                    "${set-and-setting}/setting/lib/assemble-lefthook.sh"
+                    "${set-and-setting}/setting/lib/detect-fragments.sh"
+                    "${self.packages.${pkgs.stdenv.hostPlatform.system}.setting}"
+                    "${set-and-setting}/lib/confirm.sh"
+                    (set-and-setting.rev or "unknown")
+                  ]
+                  (builtins.readFile ./scripts/confirm.sh);
+            }
+          }/bin/confirm";
+        };
+      });
     };
 }
