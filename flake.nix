@@ -285,7 +285,7 @@
             pkgs.git
             pkgs.nix
             pkgs.gh
-            nix-lefthook.packages.${sys}.default
+            nix-lefthook.packages.${sys}.setting
           ];
           defaultShellHook = ''
             export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
