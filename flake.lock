@@ -3369,11 +3369,11 @@
     "nix-lefthook-editorconfig-checker-src_10": {
       "flake": false,
       "locked": {
-        "lastModified": 1785169039,
-        "narHash": "sha256-CEfBJh8c6ueakqbXYLrwMsPJQOtm8Og18GXG9rt6/U8=",
+        "lastModified": 1785321374,
+        "narHash": "sha256-jdtCbOpJmDcYfbVoc6QpUTmT/G+4N9CZbd5Ad+mh6K0=",
         "owner": "pr0d1r2",
         "repo": "nix-lefthook-editorconfig-checker",
-        "rev": "d27bab1c04e046d6790edcd0994c1fb724259c3d",
+        "rev": "f0f57078cb22f4b132993cb8f7ef43e1961cfd4a",
         "type": "github"
       },
       "original": {
@@ -6985,11 +6985,11 @@
     "nix-lefthook-markdownlint-agentic-src_10": {
       "flake": false,
       "locked": {
-        "lastModified": 1785234033,
-        "narHash": "sha256-CwTv34LtRjb33QWyQy3+O9GW4enkYOftPLRcLRxrQX4=",
+        "lastModified": 1785355967,
+        "narHash": "sha256-oPTDKX5e7NALVgvyR1MCr3UAwdupk/vq4F0Ysvn7gJQ=",
         "owner": "pr0d1r2",
         "repo": "nix-lefthook-markdownlint-agentic",
-        "rev": "7b63a557579f48e086a9a380e4dc84c613cf6ebc",
+        "rev": "4e24f4fbf3e370fdcfab4d8c0aa70088bbf24dae",
         "type": "github"
       },
       "original": {
@@ -10121,11 +10121,11 @@
     "nix-lefthook-nix-no-embedded-shell-src_10": {
       "flake": false,
       "locked": {
-        "lastModified": 1785241348,
-        "narHash": "sha256-IIHv7uHPa7yBjdwhROXR7LUsq8+mgwo5Z8uEd348Ddo=",
+        "lastModified": 1785353366,
+        "narHash": "sha256-S9K0lqE4e/sDzpmC2FEBKMEtTqfao3ycRTEnU5U5cBI=",
         "owner": "pr0d1r2",
         "repo": "nix-lefthook-nix-no-embedded-shell",
-        "rev": "83ade4beb2adc5acde5fd0db5d5bea61e2a6eb02",
+        "rev": "0fb2b770eea43a303770a1981807a27bd6e198e0",
         "type": "github"
       },
       "original": {
@@ -12457,11 +12457,11 @@
     "nix-lefthook-shfmt-src_10": {
       "flake": false,
       "locked": {
-        "lastModified": 1785319554,
-        "narHash": "sha256-JDSFdzxhT9SNs0HMv+LDHUbw+bLBIWdjDlRixnUuRKY=",
+        "lastModified": 1785413298,
+        "narHash": "sha256-0cru5OKSFaP7i/OyuJ6Y+O02X4m39XvfvthsobU4yLE=",
         "owner": "pr0d1r2",
         "repo": "nix-lefthook-shfmt",
-        "rev": "fd599ae91e511990e6a15da9621797af4d3cef28",
+        "rev": "7425d361242e06fc26a6743f12c3de48402c5237",
         "type": "github"
       },
       "original": {
