@@ -287,17 +287,14 @@
             pkgs.gh
             nix-lefthook.packages.${sys}.setting
           ];
-          defaultShellHook = ''
-            export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
-            ${self.packages.${sys}.setting}/bin/sync-setting .
-            cp -f ${mat.files}/lefthook.yml lefthook.yml
-          '';
-          agenticShellHook = ''
-            export HOME="''${HOME:-''${TMPDIR:-/tmp}/nix-lefthook-home}"
-            ${self.packages.${sys}.setting}/bin/sync-setting .
-            ${self.packages.${sys}.set}/bin/sync-set .
-            cp -f ${mat.files}/lefthook.yml lefthook.yml
-          '';
+          defaultShellHook = builtins.replaceStrings
+            [ "@SETTING@" "@LEFTHOOK_FILES@" ]
+            [ "${self.packages.${sys}.setting}" "${mat.files}" ]
+            (builtins.readFile ./scripts/default-shell-hook.sh);
+          agenticShellHook = builtins.replaceStrings
+            [ "@SETTING@" "@SET@" "@LEFTHOOK_FILES@" ]
+            [ "${self.packages.${sys}.setting}" "${self.packages.${sys}.set}" "${mat.files}" ]
+            (builtins.readFile ./scripts/agentic-shell-hook.sh);
         }
       );
 
