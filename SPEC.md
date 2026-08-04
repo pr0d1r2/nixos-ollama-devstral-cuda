@@ -92,3 +92,4 @@ B6|2026-07-25|devShell referenced `nix-lefthook.packages.*.default` which does n
 B7|2026-07-29|`nix flake update` pinned `set-and-setting` to a revision that did not re-export `lib`, causing `attribute 'lib' missing` during flake check|update `set-and-setting` input to a revision that exports `lib`
 B8|2026-07-29|`flake.lock` grew to 651KB (many lefthook inputs) exceeding the 256KB `.lock` file-size limit, failing the `file-size-check` CI check|raise `.lock` limit in `config/lefthook/file_size_limits.yml` from 262144 to 1048576
 B9|2026-08-04|the embedded-shell guard rejected inline dev-shell hook bodies in `flake.nix`|move the default and agentic shell hooks to tracked scripts loaded with `builtins.readFile`
+B10|2026-08-04|the pinned nixfmt check rejected the newly moved shell-hook assignments because their multiline function applications were not in nixfmt's canonical layout|format the assignments with nixfmt's canonical multiline layout

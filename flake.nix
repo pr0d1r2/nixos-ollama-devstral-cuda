@@ -287,14 +287,16 @@
             pkgs.gh
             nix-lefthook.packages.${sys}.setting
           ];
-          defaultShellHook = builtins.replaceStrings
-            [ "@SETTING@" "@LEFTHOOK_FILES@" ]
-            [ "${self.packages.${sys}.setting}" "${mat.files}" ]
-            (builtins.readFile ./scripts/default-shell-hook.sh);
-          agenticShellHook = builtins.replaceStrings
-            [ "@SETTING@" "@SET@" "@LEFTHOOK_FILES@" ]
-            [ "${self.packages.${sys}.setting}" "${self.packages.${sys}.set}" "${mat.files}" ]
-            (builtins.readFile ./scripts/agentic-shell-hook.sh);
+          defaultShellHook =
+            builtins.replaceStrings
+              [ "@SETTING@" "@LEFTHOOK_FILES@" ]
+              [ "${self.packages.${sys}.setting}" "${mat.files}" ]
+              (builtins.readFile ./scripts/default-shell-hook.sh);
+          agenticShellHook =
+            builtins.replaceStrings
+              [ "@SETTING@" "@SET@" "@LEFTHOOK_FILES@" ]
+              [ "${self.packages.${sys}.setting}" "${self.packages.${sys}.set}" "${mat.files}" ]
+              (builtins.readFile ./scripts/agentic-shell-hook.sh);
         }
       );
 
