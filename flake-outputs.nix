@@ -1,0 +1,260 @@
+{
+  self,
+  nixpkgs,
+  set-and-setting,
+  nix-lefthook,
+  nix-lefthook-ascii-only-src,
+  nix-lefthook-deadnix-src,
+  nix-lefthook-editorconfig-checker-src,
+  nix-lefthook-execute-permissions-src,
+  nix-lefthook-file-size-check-src,
+  nix-lefthook-git-conflict-markers-src,
+  nix-lefthook-git-no-local-paths-src,
+  nix-lefthook-gitleaks-src,
+  nix-lefthook-markdownlint-src,
+  nix-lefthook-markdownlint-agentic-src,
+  nix-lefthook-missing-final-newline-src,
+  nix-lefthook-nix-flake-check-src,
+  nix-lefthook-nix-no-embedded-shell-src,
+  nix-lefthook-nixfmt-src,
+  nix-lefthook-no-shell-functions-src,
+  nix-lefthook-shellcheck-src,
+  nix-lefthook-shfmt-src,
+  nix-lefthook-statix-src,
+  nix-lefthook-trailing-whitespace-src,
+  nix-lefthook-typos-src,
+  nix-lefthook-yamllint-src,
+  ...
+}:
+let
+  supportedSystems = [
+    "aarch64-darwin"
+    "x86_64-darwin"
+    "x86_64-linux"
+    "aarch64-linux"
+  ];
+  fragments = [
+    "base"
+    "nix"
+    "ascii"
+    "markdown"
+    "yaml"
+  ];
+  forAllSystems =
+    f: nixpkgs.lib.genAttrs supportedSystems (system: f nixpkgs.legacyPackages.${system});
+
+  wrap =
+    pkgs: name: src: extra:
+    pkgs.writeShellApplication (
+      {
+        inherit name;
+        text = builtins.readFile "${src}/${name}.sh";
+      }
+      // extra
+    );
+
+  lefthookWrappersFor =
+    pkgs:
+    let
+      w = wrap pkgs;
+      is-markdown-agentic = pkgs.writeShellApplication {
+        name = "is-markdown-agentic";
+        text = builtins.readFile "${nix-lefthook-markdownlint-src}/is-markdown-agentic.sh";
+      };
+    in
+    [
+      (w "lefthook-ascii-only" nix-lefthook-ascii-only-src {
+        runtimeInputs = [ pkgs.gnugrep ];
+      })
+      (w "lefthook-deadnix" nix-lefthook-deadnix-src {
+        runtimeInputs = [ pkgs.deadnix ];
+      })
+      (w "lefthook-editorconfig-checker" nix-lefthook-editorconfig-checker-src {
+        runtimeInputs = [ pkgs.editorconfig-checker ];
+      })
+      (w "lefthook-execute-permissions" nix-lefthook-execute-permissions-src {
+        runtimeInputs = [ pkgs.gnugrep ];
+      })
+      (
+        let
+          get-file-size-limit = pkgs.writeShellApplication {
+            name = "get-file-size-limit";
+            text = builtins.readFile "${nix-lefthook-file-size-check-src}/get-file-size-limit.sh";
+            runtimeInputs = [
+              pkgs.gawk
+              pkgs.gnugrep
+            ];
+          };
+        in
+        w "lefthook-file-size-check" nix-lefthook-file-size-check-src {
+          runtimeInputs = [
+            get-file-size-limit
+            pkgs.gawk
+            pkgs.gnugrep
+            pkgs.coreutils
+          ];
+        }
+      )
+      (w "lefthook-git-conflict-markers" nix-lefthook-git-conflict-markers-src {
+        runtimeInputs = [ pkgs.gnugrep ];
+      })
+      (w "lefthook-git-no-local-paths" nix-lefthook-git-no-local-paths-src {
+        runtimeInputs = [ pkgs.gnugrep ];
+      })
+      (w "lefthook-gitleaks" nix-lefthook-gitleaks-src {
+        runtimeInputs = [
+          pkgs.gitleaks
+          pkgs.coreutils
+        ];
+      })
+      (w "lefthook-markdownlint" nix-lefthook-markdownlint-src {
+        runtimeInputs = [
+          is-markdown-agentic
+          pkgs.markdownlint-cli
+        ];
+      })
+      (pkgs.writeShellApplication {
+        name = "lefthook-markdownlint-agentic";
+        text =
+          builtins.replaceStrings
+            [ "@MARKDOWNLINT_AGENTIC_CONFIG@" ]
+            [ "${nix-lefthook-markdownlint-agentic-src}/.markdownlint-agentic.yml" ]
+            (builtins.readFile "${nix-lefthook-markdownlint-agentic-src}/lefthook-markdownlint-agentic.sh");
+        runtimeInputs = [
+          is-markdown-agentic
+          pkgs.markdownlint-cli
+        ];
+      })
+      (w "lefthook-missing-final-newline" nix-lefthook-missing-final-newline-src { })
+      (w "lefthook-nix-flake-check" nix-lefthook-nix-flake-check-src {
+        runtimeInputs = [ pkgs.nix ];
+      })
+      (pkgs.writeShellApplication {
+        name = "lefthook-nix-no-embedded-shell";
+        text = ''
+          SCANNER="${nix-lefthook-nix-no-embedded-shell-src}/scan-nix-no-embedded-shell.sh"
+        ''
+        + builtins.readFile "${nix-lefthook-nix-no-embedded-shell-src}/lefthook-nix-no-embedded-shell.sh";
+      })
+      (w "lefthook-nixfmt" nix-lefthook-nixfmt-src {
+        runtimeInputs = [ pkgs.nixfmt ];
+      })
+      (w "lefthook-no-shell-functions" nix-lefthook-no-shell-functions-src { })
+      (w "lefthook-shellcheck" nix-lefthook-shellcheck-src {
+        runtimeInputs = [ pkgs.shellcheck ];
+      })
+      (w "lefthook-shfmt" nix-lefthook-shfmt-src {
+        runtimeInputs = [ pkgs.shfmt ];
+      })
+      (w "lefthook-statix" nix-lefthook-statix-src {
+        runtimeInputs = [ pkgs.statix ];
+      })
+      (w "lefthook-trailing-whitespace" nix-lefthook-trailing-whitespace-src {
+        runtimeInputs = [ pkgs.gnugrep ];
+      })
+      (w "lefthook-typos" nix-lefthook-typos-src {
+        runtimeInputs = [ pkgs.typos ];
+      })
+      (w "lefthook-yamllint" nix-lefthook-yamllint-src {
+        runtimeInputs = [ pkgs.yamllint ];
+      })
+    ];
+in
+{
+  packages = forAllSystems (pkgs: {
+    set = set-and-setting.lib.mkSet { inherit pkgs; };
+    setting = (set-and-setting.lib.mkSetting { inherit pkgs; }).materialized;
+  });
+
+  devShells = forAllSystems (
+    pkgs:
+    let
+      mat = set-and-setting.lib.materializationFor { inherit pkgs fragments; };
+      sys = pkgs.stdenv.hostPlatform.system;
+    in
+    set-and-setting.lib.mkDevShells {
+      inherit pkgs;
+      basePackages = (lefthookWrappersFor pkgs) ++ [
+        pkgs.coreutils
+        pkgs.git
+        pkgs.nix
+        pkgs.gh
+        nix-lefthook.packages.${sys}.setting
+      ];
+      defaultShellHook =
+        builtins.replaceStrings
+          [ "@SETTING@" "@LEFTHOOK@" ]
+          [
+            (toString self.packages.${sys}.setting)
+            (toString mat.files)
+          ]
+          (builtins.readFile ./scripts/default-shell-hook.sh);
+      agenticShellHook =
+        builtins.replaceStrings
+          [ "@SETTING@" "@SET@" "@LEFTHOOK@" ]
+          [
+            (toString self.packages.${sys}.setting)
+            (toString self.packages.${sys}.set)
+            (toString mat.files)
+          ]
+          (builtins.readFile ./scripts/agentic-shell-hook.sh);
+    }
+  );
+
+  # #93: fragment-driven checks -- declare fragments once, get all relevant
+  # pinned checks. Fragments match those used in materializationFor.
+  checks = forAllSystems (
+    pkgs:
+    (set-and-setting.lib.checksFor {
+      inherit pkgs;
+      src = ./.;
+      inherit fragments;
+    })
+    // {
+      dep-graph = set-and-setting.lib.mkDepGraphCheck {
+        inherit pkgs;
+        projectRoot = ./.;
+      };
+      default = pkgs.runCommand "checks" { } "touch $out";
+    }
+  );
+
+  apps = forAllSystems (pkgs: {
+    confirm = {
+      type = "app";
+      program = "${
+        pkgs.writeShellApplication {
+          name = "confirm";
+          runtimeInputs = [
+            pkgs.coreutils
+            pkgs.diffutils
+            pkgs.findutils
+            pkgs.gawk
+            pkgs.git
+            pkgs.gnugrep
+          ]
+          ++ lefthookWrappersFor pkgs;
+          text =
+            builtins.replaceStrings
+              [
+                "@FRAGMENTS_DIR@"
+                "@ASSEMBLE_SCRIPT@"
+                "@DETECT_SCRIPT@"
+                "@SETTING_SRC@"
+                "@CONFIRM_SCRIPT@"
+                "@CONFIRM_REV@"
+              ]
+              [
+                "${set-and-setting}/setting/integrations/lefthook"
+                "${set-and-setting}/setting/lib/assemble-lefthook.sh"
+                "${set-and-setting}/setting/lib/detect-fragments.sh"
+                "${self.packages.${pkgs.stdenv.hostPlatform.system}.setting}"
+                "${set-and-setting}/lib/confirm.sh"
+                (set-and-setting.rev or "unknown")
+              ]
+              (builtins.readFile ./scripts/confirm.sh);
+        }
+      }/bin/confirm";
+    };
+  });
+}
