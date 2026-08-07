@@ -185,17 +185,17 @@
             builtins.replaceStrings
               [ "@SETTING@" "@LEFTHOOK@" ]
               [
-                self.packages.${sys}.setting
-                mat.files
+                (toString self.packages.${sys}.setting)
+                (toString mat.files)
               ]
               (builtins.readFile ./scripts/default-shell-hook.sh);
           agenticShellHook =
             builtins.replaceStrings
               [ "@SETTING@" "@SET@" "@LEFTHOOK@" ]
               [
-                self.packages.${sys}.setting
-                self.packages.${sys}.set
-                mat.files
+                (toString self.packages.${sys}.setting)
+                (toString self.packages.${sys}.set)
+                (toString mat.files)
               ]
               (builtins.readFile ./scripts/agentic-shell-hook.sh);
         }
