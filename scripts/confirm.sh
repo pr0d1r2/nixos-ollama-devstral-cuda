@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 export FRAGMENTS_DIR="@FRAGMENTS_DIR@"
 export ASSEMBLE_SCRIPT="@ASSEMBLE_SCRIPT@"
 export DETECT_SCRIPT="@DETECT_SCRIPT@"
