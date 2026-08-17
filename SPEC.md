@@ -96,3 +96,4 @@ B10|2026-08-07|`builtins.replaceStrings` received derivation attribute sets as r
 B11|2026-08-07|the extracted `flake-outputs.nix` used non-canonical indentation, causing the repository's `nixfmt` guardrail to fail|format `flake-outputs.nix` with the repository's Nix formatter
 B12|2026-08-11|CI ran the setting-drift check without entering the dev shell, so ignored generated Markdown and YAML lint configuration files were absent|track the materialized `.markdownlint.yml` and `.yamllint.yml` files so clean CI checkouts contain the settings they validate
 B13|2026-08-11|ShellCheck could not infer the interpreter for extracted shell hooks and reported SC2148|add explicit Bash shebangs to the hook scripts
+B14|2026-08-17|the guardrails materialization used the `shell` fragment but the local fragment list omitted it, so generated `lefthook.yml` differed from the expected configuration|include the `shell` fragment in the shared local fragment list
