@@ -22,7 +22,20 @@
       ...
     }:
     set-and-setting.lib.mkConsumerFlake {
-      inherit self nixpkgs set-and-setting;
+      inherit self set-and-setting;
+      nixpkgs = nixpkgs // {
+        legacyPackages = builtins.mapAttrs (
+          _system: pkgs:
+          pkgs
+          // {
+            lib = pkgs.lib // {
+              sources = pkgs.lib.sources // {
+                sourceByRegex = src: regex: pkgs.lib.sources.sourceByRegex src [ regex ];
+              };
+            };
+          }
+        ) nixpkgs.legacyPackages;
+      };
       fragments = [
         "base"
         "actions"
