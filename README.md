@@ -6,7 +6,7 @@
 
 ## What it is
 
-__DESCRIPTION__
+DESCRIPTION
 
 ## Usage
 
