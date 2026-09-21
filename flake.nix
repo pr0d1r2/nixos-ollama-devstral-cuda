@@ -25,21 +25,6 @@
       set-and-setting,
       ...
     }:
-    let
-      nvidiaModule =
-        { config, ... }:
-        {
-          hardware.graphics.enable = true;
-          hardware.opengl.enable = true;
-          hardware.nvidia = {
-            modesetting.enable = true;
-            open = false;
-            nvidiaSettings = false;
-            package = config.boot.kernelPackages.nvidiaPackages.stable;
-          };
-          services.xserver.videoDrivers = [ "nvidia" ];
-        };
-    in
     set-and-setting.lib.mkConsumerFlake {
       inherit self set-and-setting nixpkgs;
       extraPackages =
@@ -49,7 +34,20 @@
             system = "x86_64-linux";
             format = "iso";
             modules = [
-              nvidiaModule
+              ({ config, ... }:
+                {
+                  hardware = {
+                    graphics.enable = true;
+                    opengl.enable = true;
+                    nvidia = {
+                      modesetting.enable = true;
+                      open = false;
+                      nvidiaSettings = false;
+                      package = config.boot.kernelPackages.nvidiaPackages.stable;
+                    };
+                  };
+                  services.xserver.videoDrivers = [ "nvidia" ];
+                })
               {
                 nixpkgs.config = {
                   allowUnfree = true;
@@ -82,7 +80,20 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          nvidiaModule
+          ({ config, ... }:
+            {
+              hardware = {
+                graphics.enable = true;
+                opengl.enable = true;
+                nvidia = {
+                  modesetting.enable = true;
+                  open = false;
+                  nvidiaSettings = false;
+                  package = config.boot.kernelPackages.nvidiaPackages.stable;
+                };
+              };
+              services.xserver.videoDrivers = [ "nvidia" ];
+            })
           {
             nixpkgs.config = {
               allowUnfree = true;
