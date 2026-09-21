@@ -37,8 +37,14 @@
             format = "iso";
             modules = [
               (
-                { config, ... }:
+                { config, pkgs, ... }:
                 {
+                  services.ollama = {
+                    enable = true;
+                    package = pkgs.ollama-cuda;
+                    host = "0.0.0.0";
+                    port = 11434;
+                  };
                   hardware = {
                     graphics.enable = true;
                     opengl.enable = true;
@@ -85,8 +91,14 @@
         system = "x86_64-linux";
         modules = [
           (
-            { config, ... }:
+            { config, pkgs, ... }:
             {
+              services.ollama = {
+                enable = true;
+                package = pkgs.ollama-cuda;
+                host = "0.0.0.0";
+                port = 11434;
+              };
               hardware = {
                 graphics.enable = true;
                 opengl.enable = true;
