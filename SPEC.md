@@ -62,7 +62,7 @@ Flow: build ISO natively + fast on Ryzen 3800X/RTX3090 box → `dd` ISO to USB o
 id|status|task|cites
 T1|x|flake.nix skeleton: inputs nixpkgs + nixos-generators, x86_64-linux, nixosConfigurations.devstral|V1,I.flake
 T2|x|nixpkgs config: allowUnfree + cudaSupport|C2,C9,V8
-T3|.|nvidia module: hardware.nvidia + driver, hardware.graphics/opengl|C2,V7
+T3|x|nvidia module: hardware.nvidia + driver, hardware.graphics/opengl|C2,V7
 T4|.|ollama module: acceleration=cuda, host 0.0.0.0:11434|C3,C6,V6,V7,I.ollama-api
 T5|.|embed devstral into image (offline, no runtime pull)|C4,V4
 T6|.|avahi module: hostname devstral, mdns nss, publish `_ollama`/`_http` service|C5,V5,I.mdns
