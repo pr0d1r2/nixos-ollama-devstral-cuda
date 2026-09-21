@@ -3,7 +3,9 @@
 
   nixConfig = {
     extra-substituters = [ "https://pr0d1r2.cachix.org" ];
-    extra-trusted-public-keys = [ "pr0d1r2.cachix.org-1:NfWjbhgAj41byXhCKiaE+av3Vnphm1fTezHXEGsiQIM=" ];
+    extra-trusted-public-keys = [
+      "pr0d1r2.cachix.org-1:NfWjbhgAj41byXhCKiaE+av3Vnphm1fTezHXEGsiQIM="
+    ];
   };
 
   inputs = {
@@ -34,6 +36,22 @@
             system = "x86_64-linux";
             format = "iso";
             modules = [
+              (
+                { config, ... }:
+                {
+                  hardware = {
+                    graphics.enable = true;
+                    opengl.enable = true;
+                    nvidia = {
+                      modesetting.enable = true;
+                      open = false;
+                      nvidiaSettings = false;
+                      package = config.boot.kernelPackages.nvidiaPackages.stable;
+                    };
+                  };
+                  services.xserver.videoDrivers = [ "nvidia" ];
+                }
+              )
               {
                 nixpkgs.config = {
                   allowUnfree = true;
@@ -66,6 +84,22 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          (
+            { config, ... }:
+            {
+              hardware = {
+                graphics.enable = true;
+                opengl.enable = true;
+                nvidia = {
+                  modesetting.enable = true;
+                  open = false;
+                  nvidiaSettings = false;
+                  package = config.boot.kernelPackages.nvidiaPackages.stable;
+                };
+              };
+              services.xserver.videoDrivers = [ "nvidia" ];
+            }
+          )
           {
             nixpkgs.config = {
               allowUnfree = true;
