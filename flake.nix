@@ -35,6 +35,12 @@
             format = "iso";
             modules = [
               {
+                nixpkgs.config = {
+                  allowUnfree = true;
+                  cudaSupport = true;
+                };
+              }
+              {
                 system.stateVersion = "26.05";
                 fileSystems."/" = {
                   device = "none";
@@ -60,6 +66,12 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
+          {
+            nixpkgs.config = {
+              allowUnfree = true;
+              cudaSupport = true;
+            };
+          }
           {
             system.stateVersion = "26.05";
             fileSystems."/" = {
