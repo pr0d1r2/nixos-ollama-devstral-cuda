@@ -25,14 +25,6 @@
       set-and-setting,
       ...
     }:
-    let
-      nixpkgsConfigModule = {
-        nixpkgs.config = {
-          allowUnfree = true;
-          cudaSupport = true;
-        };
-      };
-    in
     set-and-setting.lib.mkConsumerFlake {
       inherit self set-and-setting nixpkgs;
       extraPackages =
@@ -42,7 +34,12 @@
             system = "x86_64-linux";
             format = "iso";
             modules = [
-              nixpkgsConfigModule
+              {
+                nixpkgs.config = {
+                  allowUnfree = true;
+                  cudaSupport = true;
+                };
+              }
               {
                 system.stateVersion = "26.05";
                 fileSystems."/" = {
@@ -69,7 +66,12 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          nixpkgsConfigModule
+          {
+            nixpkgs.config = {
+              allowUnfree = true;
+              cudaSupport = true;
+            };
+          }
           {
             system.stateVersion = "26.05";
             fileSystems."/" = {
