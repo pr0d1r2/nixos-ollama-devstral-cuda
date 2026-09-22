@@ -36,22 +36,21 @@
             system = "x86_64-linux";
             format = "iso";
             modules = [
-              ({ config, pkgs, ... }:
+              (
+                { config, pkgs, ... }:
                 {
                   services.ollama = {
                     enable = true;
                     package = pkgs.ollama-cuda;
                     host = "0.0.0.0";
                     port = 11434;
-                    models = "${
-                      pkgs.runCommand "ollama-devstral-model" {
-                        __noChroot = true;
-                        nativeBuildInputs = [
-                          pkgs.curl
-                          pkgs.ollama-cuda
-                        ];
-                      } (builtins.readFile ./scripts/embed-devstral.sh)
-                    }";
+                    models = "${pkgs.runCommand "ollama-devstral-model" {
+                      __noChroot = true;
+                      nativeBuildInputs = [
+                        pkgs.curl
+                        pkgs.ollama-cuda
+                      ];
+                    } (builtins.readFile ./scripts/embed-devstral.sh)}";
                   };
                   hardware = {
                     graphics.enable = true;
@@ -64,7 +63,8 @@
                     };
                   };
                   services.xserver.videoDrivers = [ "nvidia" ];
-                })
+                }
+              )
               {
                 nixpkgs.config = {
                   allowUnfree = true;
@@ -97,22 +97,21 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ({ config, pkgs, ... }:
+          (
+            { config, pkgs, ... }:
             {
               services.ollama = {
                 enable = true;
                 package = pkgs.ollama-cuda;
                 host = "0.0.0.0";
                 port = 11434;
-                models = "${
-                  pkgs.runCommand "ollama-devstral-model" {
-                    __noChroot = true;
-                    nativeBuildInputs = [
-                      pkgs.curl
-                      pkgs.ollama-cuda
-                    ];
-                  } (builtins.readFile ./scripts/embed-devstral.sh)
-                }";
+                models = "${pkgs.runCommand "ollama-devstral-model" {
+                  __noChroot = true;
+                  nativeBuildInputs = [
+                    pkgs.curl
+                    pkgs.ollama-cuda
+                  ];
+                } (builtins.readFile ./scripts/embed-devstral.sh)}";
               };
               hardware = {
                 graphics.enable = true;
@@ -125,7 +124,8 @@
                 };
               };
               services.xserver.videoDrivers = [ "nvidia" ];
-            })
+            }
+          )
           {
             nixpkgs.config = {
               allowUnfree = true;
