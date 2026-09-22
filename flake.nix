@@ -28,10 +28,15 @@
       ...
     }:
     let
-      devstralModel = pkgs: pkgs.runCommand "ollama-devstral-model" {
-        __noChroot = true;
-        nativeBuildInputs = [ pkgs.curl pkgs.ollama-cuda ];
-      } (builtins.readFile ./scripts/embed-devstral.sh);
+      devstralModel =
+        pkgs:
+        pkgs.runCommand "ollama-devstral-model" {
+          __noChroot = true;
+          nativeBuildInputs = [
+            pkgs.curl
+            pkgs.ollama-cuda
+          ];
+        } (builtins.readFile ./scripts/embed-devstral.sh);
       applianceModule =
         { config, pkgs, ... }:
         {
@@ -40,7 +45,7 @@
             package = pkgs.ollama-cuda;
             host = "0.0.0.0";
             port = 11434;
-            models = devstralModel pkgs;
+            models = "${devstralModel pkgs}";
           };
           hardware = {
             graphics.enable = true;
