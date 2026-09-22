@@ -65,7 +65,7 @@ T2|x|nixpkgs config: allowUnfree + cudaSupport|C2,C9,V8
 T3|x|nvidia module: hardware.nvidia + driver, hardware.graphics/opengl|C2,V7
 T4|x|ollama module: acceleration=cuda, host 0.0.0.0:11434|C3,C6,V6,V7,I.ollama-api
 T5|x|embed devstral into image (offline, no runtime pull)|C4,V4
-T6|.|avahi module: hostname devstral, mdns nss, publish `_ollama`/`_http` service|C5,V5,I.mdns
+T6|x|avahi module: hostname devstral, mdns nss, publish `_ollama`/`_http` service|C5,V5,I.mdns
 T7|.|ISO output: nixos-generators format iso (or isoImage target)|C7,V2,I.iso
 T8|.|networking: DHCP + firewall allow 11434 + 5353/udp mdns|C6,C5,V5,V6
 T9|.|build on Ryzen: `nix build .#iso`, document command|C8,V2,V9
