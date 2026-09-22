@@ -27,6 +27,34 @@
       set-and-setting,
       ...
     }:
+    let
+      devstralModel = pkgs: pkgs.runCommand "ollama-devstral-model" {
+        __noChroot = true;
+        nativeBuildInputs = [ pkgs.curl pkgs.ollama-cuda ];
+      } (builtins.readFile ./scripts/embed-devstral.sh);
+      applianceModule =
+        { config, pkgs, ... }:
+        {
+          services.ollama = {
+            enable = true;
+            package = pkgs.ollama-cuda;
+            host = "0.0.0.0";
+            port = 11434;
+            models = devstralModel pkgs;
+          };
+          hardware = {
+            graphics.enable = true;
+            opengl.enable = true;
+            nvidia = {
+              modesetting.enable = true;
+              open = false;
+              nvidiaSettings = false;
+              package = config.boot.kernelPackages.nvidiaPackages.stable;
+            };
+          };
+          services.xserver.videoDrivers = [ "nvidia" ];
+        };
+    in
     set-and-setting.lib.mkConsumerFlake {
       inherit self set-and-setting nixpkgs;
       extraPackages =
@@ -36,28 +64,7 @@
             system = "x86_64-linux";
             format = "iso";
             modules = [
-              (
-                { config, pkgs, ... }:
-                {
-                  services.ollama = {
-                    enable = true;
-                    package = pkgs.ollama-cuda;
-                    host = "0.0.0.0";
-                    port = 11434;
-                  };
-                  hardware = {
-                    graphics.enable = true;
-                    opengl.enable = true;
-                    nvidia = {
-                      modesetting.enable = true;
-                      open = false;
-                      nvidiaSettings = false;
-                      package = config.boot.kernelPackages.nvidiaPackages.stable;
-                    };
-                  };
-                  services.xserver.videoDrivers = [ "nvidia" ];
-                }
-              )
+              applianceModule
               {
                 nixpkgs.config = {
                   allowUnfree = true;
@@ -90,28 +97,7 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          (
-            { config, pkgs, ... }:
-            {
-              services.ollama = {
-                enable = true;
-                package = pkgs.ollama-cuda;
-                host = "0.0.0.0";
-                port = 11434;
-              };
-              hardware = {
-                graphics.enable = true;
-                opengl.enable = true;
-                nvidia = {
-                  modesetting.enable = true;
-                  open = false;
-                  nvidiaSettings = false;
-                  package = config.boot.kernelPackages.nvidiaPackages.stable;
-                };
-              };
-              services.xserver.videoDrivers = [ "nvidia" ];
-            }
-          )
+          applianceModule
           {
             nixpkgs.config = {
               allowUnfree = true;
