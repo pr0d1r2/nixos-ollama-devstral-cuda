@@ -26,6 +26,13 @@ Build the ISO natively on the Ryzen x86_64-linux host:
 nix build .#iso
 ```
 
+Run the local smoke, including `nix flake check` and validation of the ISO
+artifact:
+
+```sh
+./scripts/local-build-smoke.sh
+```
+
 The command leaves the generated artifact under `result/` (the ISO filename
 is provided by `nixos-generators`). This build is intentionally not part of
 the lightweight GitHub Actions checks, and the aarch64-darwin Mac is not a
