@@ -69,7 +69,7 @@ T6|x|avahi module: hostname devstral, mdns nss, publish `_ollama`/`_http` servic
 T7|x|ISO output: nixos-generators format iso (or isoImage target)|C7,V2,I.iso
 T8|x|networking: DHCP + firewall allow 11434 + 5353/udp mdns|C6,C5,V5,V6
 T9|x|build on Ryzen: `nix build .#iso`, document command|C8,V2,V9
-T10|.|delivery doc: dd result/*.iso → USB on Ryzen box (target host), no Mac roundtrip|C12,V10,I.burn
+T10|x|delivery doc: dd result/*.iso → USB on Ryzen box (target host), no Mac roundtrip|C12,V10,I.burn
 T11|.|nix flake check + local build smoke|V1,V2
 T12|.|commit + pin flake.lock|C11,V11
 T13|.|(optional) materialize dev/CI lint+hook layer via set-and-setting (flake check + statix/deadnix/nixfmt/shellcheck, SHA-pinned); NOT hand-wired|C13,V12,I.ci

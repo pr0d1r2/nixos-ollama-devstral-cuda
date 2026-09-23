@@ -31,6 +31,10 @@ is provided by `nixos-generators`). This build is intentionally not part of
 the lightweight GitHub Actions checks, and the aarch64-darwin Mac is not a
 supported ISO build host.
 
+To write the ISO to a USB drive, stay on the same Ryzen host and follow
+[the USB delivery procedure](docs/DELIVERY.md). It verifies the target disk
+before using `dd`; there is no Mac roundtrip.
+
 The appliance serves Ollama on `devstral.local:11434` and publishes the
 `_ollama._tcp` and `_http._tcp` Avahi services. Port 11434 has no
 authentication or TLS; connect it only to a trusted LAN.
