@@ -7,7 +7,7 @@ nix --extra-experimental-features 'nix-command flakes' flake check --no-write-lo
 printf '%s\n' 'Building the native x86_64 ISO...'
 nix --extra-experimental-features 'nix-command flakes' build .#iso
 
-mapfile -t isos < <(find result -maxdepth 1 -type f -name '*.iso' -print)
+mapfile -t isos < <(find -L result -type f -name '*.iso' -print)
 if [ "${#isos[@]}" -ne 1 ]; then
   printf 'expected exactly one ISO in result/, found %d\n' "${#isos[@]}" >&2
   exit 1
