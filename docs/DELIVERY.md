@@ -11,10 +11,18 @@ From the repository checkout on the Ryzen `x86_64-linux` host:
 nix build .#iso
 ```
 
-Confirm that the build produced exactly one ISO before selecting a USB device:
+Confirm that the build produced exactly one ISO before selecting a USB device.
+This also stores the verified path so the burn command cannot accidentally
+expand a stale or second ISO:
 
 ```sh
-find result -maxdepth 1 -type f -name '*.iso' -print
+mapfile -t isos < <(find result -maxdepth 1 -type f -name '*.iso' -print)
+if [ "${#isos[@]}" -ne 1 ]; then
+  printf 'expected exactly one ISO in result/, found %d\n' "${#isos[@]}" >&2
+  exit 1
+fi
+iso=${isos[0]}
+printf 'using %s\n' "$iso"
 ```
 
 ## Identify the USB device
@@ -42,11 +50,10 @@ the burn command until the device path has been independently checked.
 
 ## Burn and verify
 
-Use the ISO directly from `result/` on the Ryzen host. The shell glob should
-match the single ISO confirmed above:
+Use the verified ISO path directly from `result/` on the Ryzen host:
 
 ```sh
-sudo dd if=result/*.iso of=/dev/sdX bs=16M status=progress conv=fsync
+sudo dd if="$iso" of=/dev/sdX bs=16M status=progress conv=fsync
 sync
 ```
 
