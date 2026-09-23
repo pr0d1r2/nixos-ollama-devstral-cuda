@@ -12,11 +12,28 @@
 
 ## What it is
 
-DESCRIPTION
+This flake builds a bootable x86_64 NixOS ISO appliance with Ollama,
+Devstral, CUDA support, and Avahi service discovery. The ISO is intended to
+be built and booted on the Ryzen/NVIDIA target host itself. The model and
+runtime are embedded in the image, so the appliance does not need to pull the
+model after boot.
 
 ## Usage
 
-Describe how to install and use the project.
+Build the ISO natively on the Ryzen x86_64-linux host:
+
+```sh
+nix build .#iso
+```
+
+The command leaves the generated artifact under `result/` (the ISO filename
+is provided by `nixos-generators`). This build is intentionally not part of
+the lightweight GitHub Actions checks, and the aarch64-darwin Mac is not a
+supported ISO build host.
+
+The appliance serves Ollama on `devstral.local:11434` and publishes the
+`_ollama._tcp` and `_http._tcp` Avahi services. Port 11434 has no
+authentication or TLS; connect it only to a trusted LAN.
 
 ## License
 
