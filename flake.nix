@@ -37,10 +37,14 @@
             format = "iso";
             modules = [
               {
-                networking.hostName = "devstral";
-                networking.useDHCP = true;
-                networking.firewall.allowedTCPPorts = [ 11434 ];
-                networking.firewall.allowedUDPPorts = [ 5353 ];
+                networking = {
+                  hostName = "devstral";
+                  useDHCP = true;
+                  firewall = {
+                    allowedTCPPorts = [ 11434 ];
+                    allowedUDPPorts = [ 5353 ];
+                  };
+                };
                 services.avahi = {
                   enable = true;
                   nssmdns4 = true;
@@ -132,10 +136,14 @@
         system = "x86_64-linux";
         modules = [
           {
-            networking.hostName = "devstral";
-            networking.useDHCP = true;
-            networking.firewall.allowedTCPPorts = [ 11434 ];
-            networking.firewall.allowedUDPPorts = [ 5353 ];
+            networking = {
+              hostName = "devstral";
+              useDHCP = true;
+              firewall = {
+                allowedTCPPorts = [ 11434 ];
+                allowedUDPPorts = [ 5353 ];
+              };
+            };
             services.avahi = {
               enable = true;
               nssmdns4 = true;
