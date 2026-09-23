@@ -27,6 +27,48 @@
       set-and-setting,
       ...
     }:
+    let
+      networkingModule = {
+        networking = {
+          hostName = "devstral";
+          domain = "local";
+          useDHCP = true;
+          firewall = {
+            allowedTCPPorts = [ 11434 ];
+            allowedUDPPorts = [ 5353 ];
+          };
+        };
+        services.avahi = {
+          enable = true;
+          nssmdns4 = true;
+          publish.enable = true;
+          extraServiceFiles = {
+            ollama = ''
+              <?xml version="1.0" standalone="no"?>
+              <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+              <service-group>
+                <name replace-wildcards="yes">Ollama on %h</name>
+                <service>
+                  <type>_ollama._tcp</type>
+                  <port>11434</port>
+                </service>
+              </service-group>
+            '';
+            http = ''
+              <?xml version="1.0" standalone="no"?>
+              <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+              <service-group>
+                <name replace-wildcards="yes">HTTP on %h</name>
+                <service>
+                  <type>_http._tcp</type>
+                  <port>11434</port>
+                </service>
+              </service-group>
+            '';
+          };
+        };
+      };
+    in
     set-and-setting.lib.mkConsumerFlake {
       inherit self set-and-setting nixpkgs;
       extraPackages =
@@ -36,45 +78,7 @@
             system = "x86_64-linux";
             format = "iso";
             modules = [
-              {
-                networking = {
-                  hostName = "devstral";
-                  useDHCP = true;
-                  firewall = {
-                    allowedTCPPorts = [ 11434 ];
-                    allowedUDPPorts = [ 5353 ];
-                  };
-                };
-                services.avahi = {
-                  enable = true;
-                  nssmdns4 = true;
-                  publish.enable = true;
-                  extraServiceFiles = {
-                    ollama = ''
-                      <?xml version="1.0" standalone="no"?>
-                      <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-                      <service-group>
-                        <name replace-wildcards="yes">Ollama on %h</name>
-                        <service>
-                          <type>_ollama._tcp</type>
-                          <port>11434</port>
-                        </service>
-                      </service-group>
-                    '';
-                    http = ''
-                      <?xml version="1.0" standalone="no"?>
-                      <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-                      <service-group>
-                        <name replace-wildcards="yes">HTTP on %h</name>
-                        <service>
-                          <type>_http._tcp</type>
-                          <port>11434</port>
-                        </service>
-                      </service-group>
-                    '';
-                  };
-                };
-              }
+              networkingModule
               (
                 { config, pkgs, ... }:
                 {
@@ -135,45 +139,7 @@
       nixosConfigurations.devstral = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          {
-            networking = {
-              hostName = "devstral";
-              useDHCP = true;
-              firewall = {
-                allowedTCPPorts = [ 11434 ];
-                allowedUDPPorts = [ 5353 ];
-              };
-            };
-            services.avahi = {
-              enable = true;
-              nssmdns4 = true;
-              publish.enable = true;
-              extraServiceFiles = {
-                ollama = ''
-                  <?xml version="1.0" standalone="no"?>
-                  <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-                  <service-group>
-                    <name replace-wildcards="yes">Ollama on %h</name>
-                    <service>
-                      <type>_ollama._tcp</type>
-                      <port>11434</port>
-                    </service>
-                  </service-group>
-                '';
-                http = ''
-                  <?xml version="1.0" standalone="no"?>
-                  <!DOCTYPE service-group SYSTEM "avahi-service.dtd">
-                  <service-group>
-                    <name replace-wildcards="yes">HTTP on %h</name>
-                    <service>
-                      <type>_http._tcp</type>
-                      <port>11434</port>
-                    </service>
-                  </service-group>
-                '';
-              };
-            };
-          }
+          networkingModule
           (
             { config, pkgs, ... }:
             {
