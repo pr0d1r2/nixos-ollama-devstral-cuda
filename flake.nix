@@ -38,6 +38,9 @@
             modules = [
               {
                 networking.hostName = "devstral";
+                networking.useDHCP = true;
+                networking.firewall.allowedTCPPorts = [ 11434 ];
+                networking.firewall.allowedUDPPorts = [ 5353 ];
                 services.avahi = {
                   enable = true;
                   nssmdns4 = true;
@@ -130,6 +133,9 @@
         modules = [
           {
             networking.hostName = "devstral";
+            networking.useDHCP = true;
+            networking.firewall.allowedTCPPorts = [ 11434 ];
+            networking.firewall.allowedUDPPorts = [ 5353 ];
             services.avahi = {
               enable = true;
               nssmdns4 = true;
