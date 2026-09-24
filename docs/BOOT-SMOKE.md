@@ -41,7 +41,7 @@ curl --fail --silent --show-error \
   http://devstral.local:11434/api/generate \
   -H 'Content-Type: application/json' \
   -d '{"model":"devstral","prompt":"Reply with OK.","stream":false}' \
-  >/tmp/devstral-smoke.json
+  >devstral-smoke.json
 ollama ps
 nvidia-smi
 ```
