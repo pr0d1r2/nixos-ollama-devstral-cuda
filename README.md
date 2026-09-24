@@ -46,8 +46,12 @@ After booting the USB, follow the [boot smoke procedure](docs/BOOT-SMOKE.md)
 to verify Ollama, Devstral, Avahi/mDNS, NVIDIA GPU offload, and the LAN bind.
 
 The appliance serves Ollama on `devstral.local:11434` and publishes the
-`_ollama._tcp` and `_http._tcp` Avahi services. Port 11434 has no
-authentication or TLS; connect it only to a trusted LAN.
+`_ollama._tcp` and `_http._tcp` Avahi services. The firewall permits Ollama
+and mDNS only from the trusted `192.168.0.0/16` LAN subnet.
+
+__Security warning:__ Ollama on port 11434 has no authentication and no TLS.
+Connect the appliance only to a trusted, isolated LAN. Do not expose port
+11434 (or the appliance) directly to the internet or an untrusted network.
 
 ## License
 

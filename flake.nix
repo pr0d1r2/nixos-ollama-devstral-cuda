@@ -42,8 +42,16 @@
                   domain = "local";
                   useDHCP = true;
                   firewall = {
-                    allowedTCPPorts = [ 11434 ];
-                    allowedUDPPorts = [ 5353 ];
+                    # Ollama has no authentication or TLS.  Restrict both
+                    # Ollama and mDNS to the trusted private LAN.
+                    extraCommands = ''
+                      iptables -A nixos-fw -s 192.168.0.0/16 -p tcp --dport 11434 -j nixos-fw-accept
+                      iptables -A nixos-fw -s 192.168.0.0/16 -p udp --dport 5353 -j nixos-fw-accept
+                    '';
+                    extraStopCommands = ''
+                      iptables -D nixos-fw -s 192.168.0.0/16 -p tcp --dport 11434 -j nixos-fw-accept || true
+                      iptables -D nixos-fw -s 192.168.0.0/16 -p udp --dport 5353 -j nixos-fw-accept || true
+                    '';
                   };
                 };
                 services.avahi = {
@@ -142,8 +150,16 @@
               domain = "local";
               useDHCP = true;
               firewall = {
-                allowedTCPPorts = [ 11434 ];
-                allowedUDPPorts = [ 5353 ];
+                # Ollama has no authentication or TLS.  Restrict both
+                # Ollama and mDNS to the trusted private LAN.
+                extraCommands = ''
+                  iptables -A nixos-fw -s 192.168.0.0/16 -p tcp --dport 11434 -j nixos-fw-accept
+                  iptables -A nixos-fw -s 192.168.0.0/16 -p udp --dport 5353 -j nixos-fw-accept
+                '';
+                extraStopCommands = ''
+                  iptables -D nixos-fw -s 192.168.0.0/16 -p tcp --dport 11434 -j nixos-fw-accept || true
+                  iptables -D nixos-fw -s 192.168.0.0/16 -p udp --dport 5353 -j nixos-fw-accept || true
+                '';
               };
             };
             services.avahi = {
