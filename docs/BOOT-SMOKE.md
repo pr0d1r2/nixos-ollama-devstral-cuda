@@ -63,13 +63,16 @@ listener is bound to `127.0.0.1:11434`.
 
 ## LAN peer
 
-Resolve the mDNS name and verify both the Ollama tag endpoint and the LAN
-socket. Run these commands from a different machine on the same LAN:
+Resolve the mDNS name and verify the Ollama tag endpoint, OpenAI-compatible
+model listing, and LAN socket. Run these commands from a different machine on
+the same LAN:
 
 ```sh
 getent hosts devstral.local
 curl --fail --silent --show-error \
   http://devstral.local:11434/api/tags
+curl --fail --silent --show-error \
+  http://devstral.local:11434/v1/models
 curl --fail --silent --show-error \
   http://devstral.local:11434/api/generate \
   -H 'Content-Type: application/json' \
@@ -77,6 +80,7 @@ curl --fail --silent --show-error \
 ```
 
 `getent hosts` must resolve `devstral.local`, `/api/tags` must list
-`devstral` (or `devstral:latest`), and the generate request must return a
-successful response. If the LAN curl fails while a curl to `127.0.0.1` works,
-the appliance fails this smoke: fix the bind before proceeding.
+`devstral` (or `devstral:latest`), `/v1/models` must list the same model, and
+the generate request must return a successful response. If the LAN curl fails
+while a curl to `127.0.0.1` works, the appliance fails this smoke: fix the bind
+before proceeding.

@@ -49,6 +49,28 @@ The appliance serves Ollama on `devstral.local:11434` and publishes the
 `_ollama._tcp` and `_http._tcp` Avahi services. The firewall permits Ollama
 and mDNS only from the trusted `192.168.0.0/16` LAN subnet.
 
+### LAN coding-agent target
+
+OpenAI-compatible clients should use the appliance's `/v1` base URL, the
+`devstral` model, and the dummy API key `ollama`:
+
+```text
+base URL: http://devstral.local:11434/v1
+model: devstral
+API key: ollama
+```
+
+Verify the OpenAI-compatible model listing from a LAN peer:
+
+```sh
+curl --fail --silent --show-error \
+  http://devstral.local:11434/v1/models
+```
+
+The response must list `devstral` (or `devstral:latest`). For recent Ollama
+Codex integrations, set `wire_api = "responses"`. Do not use Codex `--oss`:
+that option targets a local Ollama instance and bypasses this LAN appliance.
+
 __Security warning:__ Ollama on port 11434 has no authentication and no TLS.
 Connect the appliance only to a trusted, isolated LAN. Do not expose port
 11434 (or the appliance) directly to the internet or an untrusted network.
