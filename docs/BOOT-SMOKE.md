@@ -38,16 +38,17 @@ resident and using the GPU:
 
 ```sh
 curl --fail --silent --show-error \
-  http://127.0.0.1:11434/api/generate \
+  http://devstral.local:11434/api/generate \
   -H 'Content-Type: application/json' \
   -d '{"model":"devstral","prompt":"Reply with OK.","stream":false}' \
-  >devstral-smoke.json
+  >/tmp/devstral-smoke.json
 ollama ps
 nvidia-smi
 ```
 
-The request must succeed, `ollama ps` must show `devstral`, and `nvidia-smi`
-must show Ollama using GPU memory. A CPU-only result does not pass the smoke.
+The request must succeed over the appliance's mDNS name, `ollama ps` must show
+`devstral`, and `nvidia-smi` must show Ollama using GPU memory. A CPU-only
+result does not pass the smoke.
 
 Finally, verify the listener rather than inferring it from configuration:
 
