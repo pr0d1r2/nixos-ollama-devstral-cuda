@@ -78,7 +78,7 @@ T15|x|firewall scope 11434 to LAN subnet + README trusted-network/no-auth/no-TLS
 T16|x|warm model: OLLAMA_KEEP_ALIVE=-1 in ollama env + systemd ExecStartPost preload /api/generate|C15,V14
 T17|x|single client: OLLAMA_NUM_PARALLEL=1 in ollama env|C16,V15
 T18|x|verify /v1 OpenAI-compat (`/v1/models` lists devstral) + README LAN-agent-target doc (base /v1, model devstral, key ollama; codex wire_api=responses, avoid --oss)|V17,I.ollama-api
-T19|.|ollama systemd unit enabled + Restart=always (persist reboot, auto-restart crash)|V18
+T19|x|ollama systemd unit enabled + Restart=always (persist reboot, auto-restart crash)|V18
 
 ## §B — bugs
 

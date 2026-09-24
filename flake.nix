@@ -104,9 +104,15 @@
                       ];
                     } (builtins.readFile ./scripts/embed-devstral.sh)}";
                   };
-                  systemd.services.ollama.serviceConfig.ExecStartPost = [
-                    "${pkgs.curl}/bin/curl --fail --silent --show-error --retry 60 --retry-delay 1 --retry-connrefused -H 'Content-Type: application/json' -d '{\"model\":\"devstral\",\"prompt\":\"warm up\",\"stream\":false}' http://127.0.0.1:11434/api/generate --output /dev/null"
-                  ];
+                  systemd.services.ollama = {
+                    wantedBy = [ "multi-user.target" ];
+                    serviceConfig = {
+                      Restart = "always";
+                      ExecStartPost = [
+                        "${pkgs.curl}/bin/curl --fail --silent --show-error --retry 60 --retry-delay 1 --retry-connrefused -H 'Content-Type: application/json' -d '{\"model\":\"devstral\",\"prompt\":\"warm up\",\"stream\":false}' http://127.0.0.1:11434/api/generate --output /dev/null"
+                      ];
+                    };
+                  };
                   hardware = {
                     graphics.enable = true;
                     nvidia = {
@@ -219,9 +225,15 @@
                   ];
                 } (builtins.readFile ./scripts/embed-devstral.sh)}";
               };
-              systemd.services.ollama.serviceConfig.ExecStartPost = [
-                "${pkgs.curl}/bin/curl --fail --silent --show-error --retry 60 --retry-delay 1 --retry-connrefused -H 'Content-Type: application/json' -d '{\"model\":\"devstral\",\"prompt\":\"warm up\",\"stream\":false}' http://127.0.0.1:11434/api/generate --output /dev/null"
-              ];
+              systemd.services.ollama = {
+                wantedBy = [ "multi-user.target" ];
+                serviceConfig = {
+                  Restart = "always";
+                  ExecStartPost = [
+                    "${pkgs.curl}/bin/curl --fail --silent --show-error --retry 60 --retry-delay 1 --retry-connrefused -H 'Content-Type: application/json' -d '{\"model\":\"devstral\",\"prompt\":\"warm up\",\"stream\":false}' http://127.0.0.1:11434/api/generate --output /dev/null"
+                  ];
+                };
+              };
               hardware = {
                 graphics.enable = true;
                 nvidia = {
