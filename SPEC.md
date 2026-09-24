@@ -75,7 +75,7 @@ T12|x|commit + pin flake.lock|C11,V11
 T13|x|(optional) materialize dev/CI lint+hook layer via set-and-setting (flake check + statix/deadnix/nixfmt/shellcheck, SHA-pinned); NOT hand-wired|C13,V12,I.ci
 T14|x|boot smoke doc: ollama active, devstral.local, nvidia-smi, GPU offload, LAN curl + `ss -lntp` shows 0.0.0.0:11434 (not 127.0.0.1)|V3,V4,V5,V6,V7,V16
 T15|x|firewall scope 11434 to LAN subnet + README trusted-network/no-auth/no-TLS warning|C14,V13
-T16|.|warm model: OLLAMA_KEEP_ALIVE=-1 in ollama env + systemd ExecStartPost preload /api/generate|C15,V14
+T16|x|warm model: OLLAMA_KEEP_ALIVE=-1 in ollama env + systemd ExecStartPost preload /api/generate|C15,V14
 T17|.|single client: OLLAMA_NUM_PARALLEL=1 in ollama env|C16,V15
 T18|.|verify /v1 OpenAI-compat (`/v1/models` lists devstral) + README LAN-agent-target doc (base /v1, model devstral, key ollama; codex wire_api=responses, avoid --oss)|V17,I.ollama-api
 T19|.|ollama systemd unit enabled + Restart=always (persist reboot, auto-restart crash)|V18
