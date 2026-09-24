@@ -73,7 +73,7 @@ T10|x|delivery doc: dd result/*.iso → USB on Ryzen box (target host), no Mac r
 T11|x|nix flake check + local build smoke|V1,V2
 T12|x|commit + pin flake.lock|C11,V11
 T13|x|(optional) materialize dev/CI lint+hook layer via set-and-setting (flake check + statix/deadnix/nixfmt/shellcheck, SHA-pinned); NOT hand-wired|C13,V12,I.ci
-T14|.|boot smoke doc: ollama active, devstral.local, nvidia-smi, GPU offload, LAN curl + `ss -lntp` shows 0.0.0.0:11434 (not 127.0.0.1)|V3,V4,V5,V6,V7,V16
+T14|x|boot smoke doc: ollama active, devstral.local, nvidia-smi, GPU offload, LAN curl + `ss -lntp` shows 0.0.0.0:11434 (not 127.0.0.1)|V3,V4,V5,V6,V7,V16
 T15|.|firewall scope 11434 to LAN subnet + README trusted-network/no-auth/no-TLS warning|C14,V13
 T16|.|warm model: OLLAMA_KEEP_ALIVE=-1 in ollama env + systemd ExecStartPost preload /api/generate|C15,V14
 T17|.|single client: OLLAMA_NUM_PARALLEL=1 in ollama env|C16,V15
