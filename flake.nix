@@ -94,6 +94,7 @@
                     port = 11434;
                     environmentVariables = {
                       OLLAMA_KEEP_ALIVE = "-1";
+                      OLLAMA_NUM_PARALLEL = "1";
                     };
                     models = "${pkgs.runCommand "ollama-devstral-model" {
                       __noChroot = true;
@@ -208,6 +209,7 @@
                 port = 11434;
                 environmentVariables = {
                   OLLAMA_KEEP_ALIVE = "-1";
+                  OLLAMA_NUM_PARALLEL = "1";
                 };
                 models = "${pkgs.runCommand "ollama-devstral-model" {
                   __noChroot = true;
