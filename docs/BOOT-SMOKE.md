@@ -69,10 +69,14 @@ the same LAN:
 
 ```sh
 getent hosts devstral.local
-curl --fail --silent --show-error \
-  http://devstral.local:11434/api/tags
-curl --fail --silent --show-error \
-  http://devstral.local:11434/v1/models
+tags=$(curl --fail --silent --show-error \
+  http://devstral.local:11434/api/tags)
+printf '%s\n' "$tags"
+grep -Eq '"name":"devstral(:latest)?"' <<<"$tags"
+models=$(curl --fail --silent --show-error \
+  http://devstral.local:11434/v1/models)
+printf '%s\n' "$models"
+grep -Eq '"id":"devstral(:latest)?"' <<<"$models"
 curl --fail --silent --show-error \
   http://devstral.local:11434/api/generate \
   -H 'Content-Type: application/json' \

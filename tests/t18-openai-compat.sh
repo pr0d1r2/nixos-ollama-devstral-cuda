@@ -14,6 +14,7 @@ grep -Fq 'model: devstral' "$readme_file"
 grep -Fq 'API key: ollama' "$readme_file"
 grep -Fq 'wire_api = "responses"' "$readme_file"
 grep -Fq "Do not use Codex \`--oss\`" "$readme_file"
-grep -Fq 'http://devstral.local:11434/v1/models' "$smoke_file"
+grep -Fq 'models=$(curl --fail --silent --show-error' "$smoke_file"
+grep -Fq 'grep -Eq '\''"id":"devstral(:latest)?"'\'' <<<"$models"' "$smoke_file"
 
 printf '%s\n' 'T18 OpenAI-compatible LAN target test passed.'
