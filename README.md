@@ -49,7 +49,7 @@ The appliance serves Ollama on `devstral.local:11434` and publishes the
 `_ollama._tcp` and `_http._tcp` Avahi services. The firewall permits Ollama
 and mDNS only from the trusted `192.168.0.0/16` LAN subnet.
 
-**Security warning:** Ollama on port 11434 has no authentication and no TLS.
+__Security warning:__ Ollama on port 11434 has no authentication and no TLS.
 Connect the appliance only to a trusted, isolated LAN. Do not expose port
 11434 (or the appliance) directly to the internet or an untrusted network.
 
