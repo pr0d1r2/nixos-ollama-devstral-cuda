@@ -42,6 +42,9 @@ To write the ISO to a USB drive, stay on the same Ryzen host and follow
 [the USB delivery procedure](docs/DELIVERY.md). It verifies the target disk
 before using `dd`; there is no Mac roundtrip.
 
+After booting the USB, follow the [boot smoke procedure](docs/BOOT-SMOKE.md)
+to verify Ollama, Devstral, Avahi/mDNS, NVIDIA GPU offload, and the LAN bind.
+
 The appliance serves Ollama on `devstral.local:11434` and publishes the
 `_ollama._tcp` and `_http._tcp` Avahi services. Port 11434 has no
 authentication or TLS; connect it only to a trusted LAN.

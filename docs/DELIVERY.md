@@ -65,5 +65,5 @@ lsblk -o NAME,PATH,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINTS
 ```
 
 The USB is now the boot medium for the same Ryzen box. Boot from it on that
-host and follow the boot smoke checks in the specification. This workflow
+host and follow the [boot smoke procedure](BOOT-SMOKE.md). This workflow
 does not upload an ISO to GitHub or produce a release artifact.
