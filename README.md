@@ -1,4 +1,4 @@
-# __REPO__
+# nixos-ollama-devstral-cuda
 
 <!-- hallucinogen:autonomy-disclaimer start -->
 > Read [LLM-DISCLAIMER](docs/LLM-DISCLAIMER.md) first. This repository is
@@ -6,9 +6,7 @@
 > what it may not, and what to check before trusting anything in this tree.
 <!-- hallucinogen:autonomy-disclaimer end -->
 
-[![CI](https://github.com/__OWNER__/__REPO__/actions/workflows/ci.yml/badge.svg)](https://github.com/__OWNER__/__REPO__/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-<!-- Fill in __OWNER__ and __REPO__ when the repository coordinates are known. -->
+[![CI](https://github.com/pr0d1r2/nixos-ollama-devstral-cuda/actions/workflows/ci.yml/badge.svg)](https://github.com/pr0d1r2/nixos-ollama-devstral-cuda/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![NixOS 26.05](https://img.shields.io/badge/NixOS-26.05-blue.svg?logo=nixos)](https://nixos.org)
 
 ## What it is
 
@@ -17,6 +15,21 @@ Devstral, CUDA support, and Avahi service discovery. The ISO is intended to
 be built and booted on the Ryzen/NVIDIA target host itself. The model and
 runtime are embedded in the image, so the appliance does not need to pull the
 model after boot.
+
+## Architecture
+
+```mermaid
+flowchart LR
+  flake["flake.nix"] -->|"nixos-generators"| iso["bootable x86_64 ISO"]
+  flake -->|"nixosConfigurations.devstral"| sys["NixOS system"]
+  iso --> sys
+  embed["scripts/embed-devstral.sh"] -->|"pulls devstral into the image at build"| ollama["services.ollama (CUDA)"]
+  sys --> ollama
+  sys --> avahi["services.avahi: _ollama._tcp, _http._tcp"]
+  sys --> gpu["NVIDIA driver"]
+  ollama -->|"devstral.local:11434, /v1"| lan["LAN clients (192.168.0.0/16)"]
+  avahi -->|"mDNS"| lan
+```
 
 ## Usage
 
@@ -74,6 +87,20 @@ that option targets a local Ollama instance and bypasses this LAN appliance.
 __Security warning:__ Ollama on port 11434 has no authentication and no TLS.
 Connect the appliance only to a trusted, isolated LAN. Do not expose port
 11434 (or the appliance) directly to the internet or an untrusted network.
+
+## Development architecture
+
+```mermaid
+flowchart LR
+  envrc[".envrc"] -->|"use flake"| flake["flake.nix / flake-outputs.nix"]
+  flake -->|"input"| sas["set-and-setting"]
+  flake -->|"devShell"| shell["dev shell"]
+  shell -->|"shell hooks"| hooks["scripts/default-shell-hook.sh, scripts/agentic-shell-hook.sh"]
+  lh["lefthook.yml"] -->|"pre-commit / pre-push"| checks["linters, bats, nix flake check"]
+  shell --> lh
+  smoke["scripts/local-build-smoke.sh"] -->|"on the Ryzen host"| isocheck["nix build .#iso + ISO validation"]
+  ci[".github/workflows/ci.yml"] --> checks
+```
 
 ## License
 
