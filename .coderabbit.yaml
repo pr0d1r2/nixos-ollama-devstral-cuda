@@ -21,10 +21,11 @@ reviews:
   path_instructions:
     - path: "**/SPEC.md"
       instructions: >-
-        Rows in the bug (B) and task (T) tables have exactly four `|`-separated fields
-        (id, date or status, text, cites); a literal pipe inside the text is
-        escaped as `\|`. The up-tack symbol (U+22A5) means "not". Cited ids must be declared in this
-        spec or written in the federated `path:ID` form. Do not suggest
+        Rows in the task (T) table have exactly four `|`-separated fields
+        (id, status, task, cites); rows in the bug (B) table have exactly four
+        (id, date, cause, fix) and carry no cites. A literal pipe inside a
+        field is escaped as `\|`. Ids cited in the T table must be declared in
+        this spec or written in the federated `path:ID` form. Do not suggest
         rewriting the notation itself.
 chat:
   auto_reply: false
